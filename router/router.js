@@ -33,4 +33,14 @@ router.post('/login',async (req,res)=>{
         res.status(400).send("Unable to send anything...Pl check program")
     }
 })
+
+router.get('/findAll',async (req,res)=>{
+
+    try{
+    const user= await User.find({})
+    res.send(user)
+    }catch(e){
+        res.status(400).send('Unable to get Data...!!')
+    }
+})
 module.exports=router
