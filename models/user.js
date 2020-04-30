@@ -1,41 +1,47 @@
 const mongoose=require('mongoose')
-
+//var today = new Date();
 const userSchema = new mongoose.Schema({
 
     name:{
         type:String
     },
     BarcodeID:{
-        type:String
+        type:String,
+        unique:true
     },
     Temperature:[{
         temp:{
-            type:String
+            type:String,
+            required:true
+        },
+        time:{
+            type:String,
+            required:true
+        },
+        date:{
+            type:String,
+            required:true
         }
     }]
 })
 
-userSchema.methods.givingTemperature= async function (){
+userSchema.statics.findByDetails=async (BarcodeID)=> {
+    console.log(BarcodeID)
+    const user= await User.findOne({BarcodeID})
+    console.log("Inside Statics..!!")
+    return user
+}
+userSchema.methods.givingTemperatureAndTime_Date=  async function(){
     console.log("Inside Methods...!!!")
     const user=this
-    const temp="Default Temperature"
-    user.Temperature = user.Temperature.concat({ temp })
+    var temp="Default Temperature"
+    var today = new Date();
+    var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    user.Temperature = user.Temperature.concat({temp,date,time})
     await user.save()
     return temp
 }
-
-userSchema.statics.findByDetails=async (BarcodeID)=> {
-    console.log(BarcodeID)
-    const user= await User.find({BarcodeID})
-    console.log("Inside Statics..!!")
-    if(!user)
-    {
-        return 0
-    }
-    return user
-}
-
-
 const User = mongoose.model('User', userSchema)
 
 module.exports = User
