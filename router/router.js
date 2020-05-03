@@ -47,5 +47,58 @@ router.get('/findAll',async (req,res)=>{
     }
 })
 
+router.get('/Name',async(req,res)=>{
+
+    const Username=req.body.name
+    try{
+        const ArrayOfName= await User.find({name:Username})
+        console.log(ArrayOfName)
+        res.send(ArrayOfName)
+    }catch(e)
+    {
+        res.status(400).send('Unable to get Data...!!')
+    }
+})
+
+router.get('/test',async(req,res)=>{
+
+    const DD = "2-5-2020"
+    var simpleArray=[]
+    console.log("Type of DD is "+typeof(DD))
+    try{
+        const user= await User.find({})
+        const user1=user.map((variable)=>{
+            console.log("This is information is about "+variable.name)
+            const user2=variable.Temperature.map((variable2)=>{
+                if(variable2.date === DD)
+                { var fullInfo=variable2.temp}
+                return fullInfo
+               
+            }) 
+            //console.log("Value of user2 is "+user2)  
+            user2.forEach((varr)=>{
+                //console.log(varr)
+                if(varr !== undefined) {
+                    //console.log(variable.name, varr)
+                    var Info=simplefunction(variable.name,varr)
+                    console.log("Type of Info is "+typeof Info) 
+                   //console.log("Value of simplearray is inside "+simpleArray)
+                }     
+            })
+        })
+        //console.log("Final Value of user is=="+user1)
+        
+        }catch(e){
+            res.status(400).send('Unable to get Data...!!')
+        }
+
+})
+
+var simplefunction=function(n,v){
+    var Infoo ={name:n, lastName:v}
+        //console.log(Infoo)
+        //Infoo.printInfo()
+    return Infoo
+}
 
 module.exports=router
