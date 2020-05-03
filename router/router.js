@@ -62,6 +62,29 @@ router.get('/Name',async(req,res)=>{
 
 router.get('/test',async(req,res)=>{
 
+    //Dates Range in this Code 
+    var object={first:req.body.startDate,second :endDate}
+
+var datetime = require('node-datetime')
+var dt = datetime.create(object.first)
+
+var dates = dt.getDatesInRange(datetime.create(object.second))
+
+const  rangeOfdates=[]
+const user1=dates.map((variable)=>{
+    var objecttoString=JSON.stringify(variable._now)
+    const newDateString=objecttoString.slice(1,11)
+
+    //Below is ranges of dates in form of string.
+    rangeOfdates.push(newDateString)
+    }) 
+
+console.log("Total Dates in range is form of Array "+rangeOfdates) 
+
+//Above Code Gives you a Array which will contain all dates in that range of start Date and 
+//End date in a form of array. That all dates are in form of string in rangeOfDates Array.
+
+
     const DD = "2-5-2020"
     var simpleArray=[]
     console.log("Type of DD is "+typeof(DD))

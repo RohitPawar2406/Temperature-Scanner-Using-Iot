@@ -23,23 +23,24 @@ while (i<3) {
 }
 console.log(array[0])*/
 var obj='2020-05-01'
-var obj2='2020-05-05'
+var obj2='2020-06-10'
 var object={first:obj,second :obj2}
-console.log(object)
 
 var datetime = require('node-datetime')
 var dt = datetime.create(object.first)
-console.log(typeof dt,dt)
-var formattedDate = dt.format('m/d/y ')
-console.log(formattedDate,typeof formattedDate)
 
 var dates = dt.getDatesInRange(datetime.create(object.second))
-console.log(typeof dates ,dates)
-//console.log("0th Index is "+dates.DateTimecl)
-const user1=dates.map((variable)=>{
-    console.log("Starts here "+variable._now+typeof variable._now)
 
+const  rangeOfdates=[]
+const user1=dates.map((variable)=>{
+    var objecttoString=JSON.stringify(variable._now)
+    const newDateString=objecttoString.slice(1,11)
+
+    //Below is ranges of dates in form of string.
+    rangeOfdates.push(newDateString)
     }) 
+
+console.log("Total Dates in range is form of Array "+rangeOfdates)    
 
 
              
