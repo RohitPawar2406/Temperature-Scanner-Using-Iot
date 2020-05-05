@@ -5,7 +5,7 @@ const router = new express.Router()
 router.post('',async(req,res)=>{
 
     var barcode=req.body.BarcodeID
-    var tempFromOutside=req.body.Temperature
+    var tempFromOutside=req.body.temperature
    if(barcode ===undefined && tempFromOutside===undefined)
     {
       return res.send("Please Provide Barcode And Temperature.")
@@ -13,6 +13,7 @@ router.post('',async(req,res)=>{
 
     try{
         const user= await User.findByDetails(barcode)
+        console.log("Value Of user is "+user)
         if(user!==null)
         {
             const temp= await user.givingTemperatureAndTime_Date(tempFromOutside)
@@ -20,9 +21,11 @@ router.post('',async(req,res)=>{
         }
         else
         {
+            console.log("Inside Else Part.")
             const user=new User(req.body)
+            console.log("Value of User is "+user)
             await user.save()
-            const temp= await user.givingTemperatureAndTime_Date()
+            const temp= await user.givingTemperatureAndTime_Date(tempFromOutside)
             res.send({user,temp})
         }
         }catch(e){
@@ -93,11 +96,12 @@ console.log("Total Dates in range is form of Array "+rangeOfdates)
         var user=await User.find({})
         rangeOfdates.forEach(element => {
             var user11=user.map((variable)=>{
+                var naav=variable.name
                 var user2=variable.Temperature.map((variable2)=>{
                     if(element==variable2.date)
                     {
                         console.log(variable2.temp,variable2.time,variable2.date)
-                        obj={Tempo:variable2.temp,Time:variable2.time, CuurentDate:variable2.date}
+                        obj={Name:naav,Tempo:variable2.temp,Time:variable2.time, CuurentDate:variable2.date}
                         SimpleArray.push(obj)
                     }
                 })
@@ -136,22 +140,42 @@ const user1=dates.map((variable)=>{
 console.log("Total Dates in range is form of Array "+rangeOfdates) 
 
 var obj={}
+var obj2={}
+var finalobj={}
 var SimpleArray=[]
+var temparray=[]
+var finalArray=[]
 try{
     var user=await User.find({})
     rangeOfdates.forEach(element => {
         var user11=user.map((variable)=>{
+            var naav=variable.name
             var user2=variable.Temperature.map((variable2)=>{
                 if(element==variable2.date)
                 {
                     console.log(variable2.temp,variable2.time,variable2.date)
-                    obj={Tempo:variable2.temp,Time:variable2.time, CuurentDate:variable2.date}
+                    obj={Name:naav,Tempo:variable2.temp,Time:variable2.time, CuurentDate:variable2.date}
                     SimpleArray.push(obj)
                 }
             })
             })
+        console.log("Value of SimpleArray is "+SimpleArray[0])    
+        var maxTempOfthatDay=Math.max.apply(Math,SimpleArray.map((finalVar)=>{return finalVar.Tempo}))
+        console.log("Inside Math MAX...!!!",maxTempOfthatDay)
+        var user111=SimpleArray.map((o)=>{
+            console.log(o+maxTempOfthatDay)
+            console.log(o.Tempo==maxTempOfthatDay) 
+            if(o.Tempo==maxTempOfthatDay)
+            {
+                console.log("HEllo")
+                console.log(o.Name,o.Tempo)
+                finalobj={Name:o.name,Tempo:o.Tempo,CurrentDate:o.CuurentDate,Time:o.Time}
+                finalArray.push(finalobj)
+            }
+        })  
     })
-    res.send(SimpleArray)
+    console.log(finalArray)
+    res.send(finalArray)
 }catch(e){
         res.status(400).send('Unable to get Data...!!')
     }

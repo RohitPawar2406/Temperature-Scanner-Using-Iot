@@ -27,14 +27,17 @@ const userSchema = new mongoose.Schema({
 })
 
 userSchema.statics.findByDetails=async (BarcodeID)=> {
+    console.log("Inside finfdetails...")
     console.log(BarcodeID)
     const user= await User.findOne({BarcodeID})
+    console.log("Outside finfdetails...")
     return user
 }
 userSchema.methods.givingTemperatureAndTime_Date=  async function(TemperatureReading){
     const user=this
     var temp=TemperatureReading
     var today = new Date()
+    console.log("Inside Methods...!!!!")
     if((today.getMonth()+1)<10 && (today.getDate())<10)
     {
         var date=today.getFullYear()+'-'+'0'+(today.getMonth()+1)+'-'+'0'+today.getDate()
