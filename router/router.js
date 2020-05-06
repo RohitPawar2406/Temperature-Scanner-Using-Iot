@@ -28,6 +28,7 @@ router.post('',async(req,res)=>{
             const temp= await user.givingTemperatureAndTime_Date(tempFromOutside)
             res.send({user,temp})
         }
+        
         }catch(e){
             res.status(400).send('Unable to Save Data')
         }
