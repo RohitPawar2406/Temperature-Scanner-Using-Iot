@@ -2,38 +2,28 @@ const express = require('express')
 const User=require('../models/user')
 const router = new express.Router()
 
-router.post('',async (req,res)=>{
+router.post('',async(req,res)=>{
 
-    //Saving New Data
-    const user=new User(req.body)
-    try{
-
-        await user.save()
-       // const temp= await user.givingTemperature()
-        res.status(201).send({user})  
-    } catch(e){
-        res.status(500).send('Error is occured')    
-    }
-
-})
-
-router.post('/login',async (req,res)=>{
-    console.log("Inside Post of login")
-    try {
-        const user = await User.findByDetails(req.body.BarcodeID)
-        console.log(typeof(user)+' is of this type')
+    var barcode=req.body.BarcodeID
+    const user= await User.findByDetails(barcode)
+    console.log("Vlaue of user is ",user)
+    if(user!==null)
+    {
+        console.log("Inside IF")
         const temp= await user.givingTemperatureAndTime_Date()
-        console.log("Value of temp is "+ temp)
         res.send({user,temp})
-
-         //const appp=user.neww()
-         // const temp=  await user.givingTemperature()
-        //console.log(temp)
-        //res.send({user,temp})
-    } catch (e) {
-        res.status(400).send("Unable to send anything...Pl check program")
     }
+    else
+    {
+        console.log("Barcode is not found...")
+        const user=new User(req.body)
+        await user.save()
+        const temp= await user.givingTemperatureAndTime_Date()
+        res.send({user,temp})
+    }
+
 })
+
 
 router.get('/findAll',async (req,res)=>{
 
@@ -61,10 +51,8 @@ router.get('/Name',async(req,res)=>{
 })
 
 router.get('/test',async(req,res)=>{
-
-    //Dates Range in this Code 
-    var object={first:req.body.startDate,second :req.body.endDate}
-
+ 
+var object={first:req.body.startDate,second :req.body.endDate}
 var datetime = require('node-datetime')
 var dt = datetime.create(object.first)
 
@@ -90,35 +78,21 @@ console.log("Total Dates in range is form of Array "+rangeOfdates)
         var user=await User.find({})
         rangeOfdates.forEach(element => {
             var user11=user.map((variable)=>{
-                console.log("This is info of "+variable.name)
                 var user2=variable.Temperature.map((variable2)=>{
-                    console.log("Value of Element is "+element+"And variable2.date is "+variable2.date)
-                    console.log(element==variable2.date)
                     if(element==variable2.date)
                     {
                         console.log(variable2.temp,variable2.time,variable2.date)
                         obj={Tempo:variable2.temp,Time:variable2.time, CuurentDate:variable2.date}
                         SimpleArray.push(obj)
-                        console.log(SimpleArray)
                     }
                 })
-        
                 })
         })
-
-        console.log("value of SimpleArray is "+SimpleArray)
         res.send(SimpleArray)
     }catch(e){
             res.status(400).send('Unable to get Data...!!')
         }
 
 })
-
-var simplefunction=function(n,v){
-    var Infoo ={name:n, lastName:v}
-        //console.log(Infoo)
-        //Infoo.printInfo()
-    return Infoo
-}
 
 module.exports=router
