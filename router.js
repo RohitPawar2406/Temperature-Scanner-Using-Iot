@@ -1,23 +1,9 @@
 const express = require('express')
 const User=require('../models/user')
-var xlsx = require('xlsx')
-var Excel = require('exceljs')
-
-var wb = new Excel.Workbook();
-var file = 'Temp1.xlsx'
-var sheet =  wb.addWorksheet('Sheet1')
-var next = wb.getWorksheet('Sheet1')
 const router = new express.Router()
-var array = ['BarcodeID', 'Name', 'Temperature', 'Time', 'Date']
-next.addRow(array)
 
 router.post('',async(req,res)=>{
-    var array = [req.body.BarcodeID,req.body.name,req.body.Temperature.temp,req.body.Temperature.time,req.body.Temperature.date]
-    console.log(array)
-    next.addRow(array)
-    wb.xlsx.writeFile(file).then(function(){
-            console.log('Added')
-    })  
+
 console.log('In post')
     var barcode=req.body.BarcodeID
     var tempFromOutside=req.body.temperature
@@ -32,6 +18,7 @@ console.log('In post')
         if(user!==null)
         {
             const temp = await user.givingTemperatureAndTime_Date(tempFromOutside)
+            await user.saveToExcel(user.Temperature)
             res.send({user,temp})
         }
         else
@@ -40,10 +27,12 @@ console.log('In post')
             const user=new User(req.body)
             console.log("Value of User is "+user)
             await user.save()
-            const temp= await user.givingTemperatureAndTime_Date(tempFromOutside)
+            const temp = await user.givingTemperatureAndTime_Date(tempFromOutside)
+            await user.saveToExcel(user.Temperature)
             res.send({user,temp})
         }
         }catch(e){
+            console.log(e)
             res.status(400).send('Unable to Save Data')
         }
 })
