@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Temperature details</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <style>
+          #table{
+            visibility: hidden;
+          }
+          #user{
+            visibility: hidden;
+            margin: 1rem 0;
+            padding: 1rem 0;
+          }
+        </style>
+    </head>
+    <body>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="All.html">All records <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="max.html">Maximum Temperature</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="barcode.html">Find by Barcode</a>
+            </li>            
+          </ul>
+        </div>
+      </nav>
+        <div class="container">
+            <h1 class="text-center" style="margin: 2rem 0;">Find by BarcodeID</h1>
+            <div class="row" style="margin: 2rem 0;">
+              <div class="col text-right">
+                <form>
+                  Enter BarcodeID:  &nbsp;<input type="text" id="barcode">
+                </form>
+              </div>
+              <div class="col">
+                <button onclick="myFunction()">Submit</button>
+              </div>
+            </div>
+            <div class="text-center border" id="user">
+              <h6 id="BarcodeID"></h6>
+              <h6 id="name"></h6>
+            </div>
+            <h6 id="details"></h6>
+            <table class="table table-striped" id="table" style="width: 100%;">
+                <thead>
+                    <tr>
+                      <th>Temperature</th>
+                      <th>Date</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody id="info">
+      
+                  </tbody>
+            </table>
+        </div>
+
+<script src="js/barcode.js"></script>
+</script>
+    </body>
+</html>
