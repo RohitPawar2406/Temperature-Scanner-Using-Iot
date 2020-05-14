@@ -8,6 +8,16 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <style>
+          #table{
+            visibility: hidden;
+          }
+          #user{
+            visibility: hidden;
+            margin: 1rem 0;
+            padding: 1rem 0;
+          }
+        </style>
     </head>
     <body>
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -32,5 +42,39 @@
         </div>
       </nav>
       <h1 class="text-center" style="margin: 3rem;">Temperature Scanner</h1>
+
+      <div class="container">
+        <form>
+          <div class="row">
+            <div class="col">Barcode: &nbsp;
+              <input type="text" id="barcode">
+            </div>
+            <div class="col">Temperature: &nbsp;
+              <input type="text" id="temp">
+            </div>
+          </div>
+        </form>
+        <div class="row justify-content-center" style="margin: 2rem 0;">
+          <button onclick="myFunction()">Submit</button>
+        </div>
+        <div class="text-center border" id="user">
+          <h6 id="BarcodeID"></h6>
+          <h6 id="name"></h6>
+        </div>
+        <h6 id="details"></h6>
+        <table class="table table-striped" id="table" style="width: 100%;">
+          <thead>
+              <tr>
+                <th>Temperature</th>
+                <th>Date</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="info">
+
+            </tbody>
+      </table>
+      </div>
+      <script src="js/index.js"></script>
     </body>
 </html>
