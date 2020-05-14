@@ -4,42 +4,45 @@ const router = new express.Router()
 
 router.post('',async(req,res)=>{
 
-    var barcode=req.body.BarcodeID
-    var tempFromOutside=req.body.temperature
-   if(barcode ===undefined && tempFromOutside===undefined)
-    {
-      return res.send("Please Provide Barcode And Temperature.")
-    }
-
-    try{
-        const user= await User.findByDetails(barcode)
-        console.log("Value Of user is "+user)
-        if(user!==null)
+    console.log('In post')
+        var barcode=req.body.BarcodeID
+        var tempFromOutside=req.body.temperature
+       if(barcode ===undefined && tempFromOutside===undefined)
         {
-            const temp= await user.givingTemperatureAndTime_Date(tempFromOutside)
-            res.send({user,temp})
+          return res.send("Please Provide Barcode And Temperature.")
         }
-        else
-        {
-            console.log("Inside Else Part.")
-            const user=new User(req.body)
-            console.log("Value of User is "+user)
-            await user.save()
-            const temp= await user.givingTemperatureAndTime_Date(tempFromOutside)
-            res.send({user,temp})
-        }
-        
-        }catch(e){
-            res.status(400).send('Unable to Save Data')
-        }
-})
+    
+        try{
+            const user= await User.findByDetails(barcode)
+            console.log("Value Of user is "+user)
+            if(user!==null)
+            {
+                const temp = await user.givingTemperatureAndTime_Date(tempFromOutside)
+                res.send({user,temp})
+            }
+            else
+            {
+                console.log("Inside Else Part.")
+                const user=new User(req.body)
+                console.log("Value of User is "+user)
+                await user.save()
+                const temp = await user.givingTemperatureAndTime_Date(tempFromOutside)
+                await user.saveToExcel(user.Temperature)
+                res.send({user,temp})
+            }
+            }catch(e){
+                console.log(e)
+                res.status(400).send('Unable to Save Data')
+            }
+    })
+    
 
 
 router.get('/findAll',async (req,res)=>{
 
     try{
     const user= await User.find({})
-    if(user ===0)
+    if(user === 0)
     { throw new Error }
     res.send(user)
     }catch(e){
@@ -47,18 +50,18 @@ router.get('/findAll',async (req,res)=>{
     }
 })
 
-router.get('/Name',async(req,res)=>{
+router.post('/barcode',async(req,res)=>{
 
-    const Username=req.body.name
-    if(Username==undefined)
-    {res.send("Please Enter Name To Search.")}
+    const barcode = req.body.BarcodeID
+    if(barcode==undefined)
+    {res.send("Please Enter BarcodeID To Search.")}
     try{
-        const ArrayOfName= await User.find({name:Username})
-        console.log(ArrayOfName)
-        res.send(ArrayOfName)
+        const name = await User.find({BarcodeID:barcode})
+        console.log(name)
+        res.send(name)
     }catch(e)
     {
-        res.status(400).send('Unable to get Data...!!')
+        res.status(400).send('Unable to get Data from barcode...!!')
     }
 })
 
@@ -115,10 +118,14 @@ console.log("Total Dates in range is form of Array "+rangeOfdates)
 
 })
 
-router.get('/maxtemp',async (req,res)=>{
+router.post('/maxtemp',async (req,res)=>{
+    console.log('In maxtemp')
     var object={first:req.body.startDate,second :req.body.endDate}
 if(object.first==undefined && object.second==undefined)
-{   res.send("Please Enter Dates to Search.")}
+{  
+res.send("Please Enter Dates to Search.")
+}
+
 if(object.second ==undefined)
 {
     object.second=object.first

@@ -64,6 +64,7 @@ userSchema.methods.givingTemperatureAndTime_Date=  async function(TemperatureRea
     await user.save()
     return temp
 }
+
 const User = mongoose.model('User', userSchema)
 
 module.exports = User
