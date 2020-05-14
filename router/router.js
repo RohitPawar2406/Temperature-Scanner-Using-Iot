@@ -18,7 +18,6 @@ router.post('',async(req,res)=>{
             if(user!==null)
             {
                 const temp = await user.givingTemperatureAndTime_Date(tempFromOutside)
-                await user.saveToExcel(user.Temperature)
                 res.send({user,temp})
             }
             else
