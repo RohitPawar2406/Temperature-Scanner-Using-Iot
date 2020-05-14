@@ -18,7 +18,6 @@ function myFunction() {
       "endDate": end.value})
     }).then((content) => content.json()).then(function(content) {
         console.log(content)   
-        table.style.visibility = "visible"
         var data=""
         for(i in content)
         {
@@ -26,6 +25,13 @@ function myFunction() {
       data +="<tr><td>" + content[i].Tempo + "</td><td>" + content[i].CurrentDate + "</td><td>" + content[i].Time + "</td></tr>"
     }
         var info = document.getElementById('info')
+        var p = document.getElementById('note')
+        if(data!="")
+        table.style.visibility = "visible"
+        else
+        {
+          p.innerHTML ="No data to display"
+        }
         info.innerHTML = data
         }).catch(function(error) {
         console.log(error)

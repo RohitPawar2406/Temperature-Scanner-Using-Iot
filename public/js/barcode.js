@@ -35,7 +35,8 @@ function myFunction() {
         var info = document.getElementById('info')
         info.innerHTML = data
         }).catch(function(error) {
-          details.textContent = "Invalid Barcode!"
+          var p = document.getElementById('note')
+          p.textContent = "Please enter a valid BarcodeID!"
         console.log(error)
       });   
     }
